@@ -1,0 +1,374 @@
+Variables:
+
+- use $ to tell the computer you are using a variable 
+- usually system variables are all caps
+- user made variables are lower-case for the most part
+ Example
+  echo $BASH_VERSION
+  name=adawgg
+  echo $name
+- the first echo command would return what version of bash is running on the 
+  OS
+- the second command would return adawgg or whatever else after equal sign
+- you cannot start a user made variable with a number only letters
+
+Taking User Input:
+
+- use read and the name of your variable to take user input 
+- you can also use multiple variables in one read command 
+ Example:
+  echo enter ur name pls
+  read name
+  echo nice to meet ya $name
+- this program would ask for the input of your name and return it alongside
+  with nice to meet ya
+- use the flag -p to add a prompt before ask for input in the same command
+ Example:
+  read -p "enter ur name:" $name
+  echo your name is $name
+- this would return your name is <input>
+- to make the input "silent" or hidden, use the -s flag
+- you can use the -s and -p flag in conjunction
+ Example:
+  read -sp "enter secret word: " $word
+  echo your word is $word
+  echo not so secret now is it
+- run this and find out what it does 
+- use the flag -a to create an array with multiple inputs inserted by the user
+ Example:
+  echo enter names : 
+  read -a names
+  echo here they are ${names[0]} ${names[1]}
+- this will return here they are and the two names that were set by the user
+- the default variable when there is no variable set on read is $REPLY 
+ Example:
+  echo enter name
+  read
+  echo $REPLY
+- this will return whatever input was given to read
+
+Passing arguements to a program: 
+
+- to pass an arguement to a script while you are starting it write this code:
+  $ MyScript.sh arg1 arg2 arg3
+ Example:
+  echo $1 $2 $3
+- when you run test.sh you will have to give it 3 arguements after you type 
+  the name of the file 
+ Example:
+  $ bash ./test.sh one two three
+- this would return the actual words one two and three
+- if add $0 to the previous echo command it will return the name of the program that 
+  you just ran, which is techinally the 0th variable
+- if you wish to pass arguements into an array instead of seperate variables 
+  use ("$@") as the data of the array.
+- the array index starts with 0. to access a specific index use the following
+  syntax
+  Example:
+   args=("$@")
+   echo here is your data ${args[0]} ${args[1]}
+- when you run:
+  $ test.sh data1 data2
+  it will return:
+  here is your data data1 data2
+- use echo $@ to echo everything inside of args
+ Example: 
+  args=("$@")
+  echo here is your data $@
+- this will return the same output as the last program
+- if you wish to find out how many arguements you just passed, use $#,
+  another default variable given to you by the system, much like $@.
+ Example: 
+  args=("$@")
+  echo numbers of arguements inside of array : $#
+
+If statement:
+
+- if the condition is true it runs the then statement. if it is false it will
+  run the else statement
+- You can have an if statement without the else statment.
+- fi tells the computer where the end of the if statement is.
+
+-If then:
+ Grammar:
+  if [condition]
+  then 
+    statement
+  else
+    statement
+   fi 
+
+- if elif statement:
+
+- the elif statement serves as another if statement. 
+
+ Grammar:
+  if [ condition ]
+  then
+    statement
+  elif [ condition ]
+  then 
+    statement
+  else
+    statement
+  fi
+
+- String Comparisons:  
+   ---------------------------------
+   =  compare if two strings are equal
+   !=  compare if two strings are not equal
+   -n  evaluate if string length is greater than zero
+   -z  evaluate if string length is equal to zero
+   (must use double square brackettes for angled bracket comparisons) 
+   <  is less than in ASCII alphaetical order
+   >  is greater than in ASCII alphaetical order
+   <= is less than or equal to in ASCII alphaetical order
+   >= is greater than or equal to in ASCII alphaetical order
+
+ Examples: 
+   [ s1 = s2 ]  (true if s1 same as s2, else false)
+   [ s1 != s2 ]  (true if s1 not same as s2, else false)
+   [ s1 ]   (true if s1 is not empty, else false)
+   [ -n s1 ]   (true if s1 has a length greater then 0, else false)
+   [ -z s2 ]   (true if s2 has a length of 0, otherwise false)
+
+  Number Comparisons: 
+   ------------------------------------
+  -eq compare if two numbers are equal
+  -ge compare if one number is greater than or equal to a number
+  -le  compare if one number is less than or equal to a number
+  -ne  compare if two numbers are not equal
+  -gt  compare if one number is greater than another number
+  -lt  compare if one number is less than another number 
+
+ Examples: 
+  [ n1 -eq n2 ]  (true if n1 same as n2, else false)
+  [ n1 -ge n2 ]  (true if n1greater then or equal to n2, else false)
+  [ n1 -le n2 ]  (true if n1 less then or equal to n2, else false)
+  [ n1 -ne n2 ]  (true if n1 is not same as n2, else false)
+  [ n1 -gt n2 ]  (true if n1 greater then n2, else false)
+  [ n1 -lt n2 ]  (true if n1 less then n2, else false)
+
+File test operators
+
+- use the -e flag and a file name as the if condition to see if a file exists
+ Example:
+
+  read -p "Enter your file name : " file 
+  if [ -e $file ] 
+  then 
+    echo "file found" 
+  else
+    echo "try again"
+  fi
+
+- use the -f flag similarly. The only difference is that -f tells you wether
+  if it is a regular file. not a directory.
+- use the -d flag to find directories.
+- use -s to see wether the file or directory is empty
+- use -c to verify wether it is a text file
+- use -b to verify it is a block file. Basically any media file.
+- use -r to see if a  file has read permissions
+- use -w to see if a file has write permissions
+- use -x to see wether a file has execute permissions
+
+How to append output to the end of a text file
+
+- use > to overwrite the file
+- use >> to add or "append" to the file
+ Example:
+  read -p "Enter your file name : " file 
+  if [ -e $file ] 
+  then 
+    if [ -w $file ] 
+    then 
+      echo "input your data, crtl+d to quit"
+      cat >> $file
+    else
+      echo "Permissions Denied"
+    fi
+  else
+    echo "$file could not be found.. Please try again"
+  fi
+
+Using the and operator with if
+
+- use && to glue two conditions together in a if statement
+- the && only executes if both of the conditions of the are true
+ Example:
+  read -p "Enter your file name : " file 
+  if [ -e $file ] 
+  then 
+    if [ -w $file ] && [ -r $file ]
+    then 
+      echo "input your data, crtl+d to quit"
+      cat >> $file
+    else
+      echo "Permissions Denied"
+    fi
+  else
+    echo "$file could not be found.. Please try again"
+  fi 
+ 
+- use the -a flag in the same condition statement to glue two conditions 
+  together in the same statement  
+ Example:
+  read -p "Enter your file name : " file 
+  if [ -e $file ] 
+  then 
+    if [ -w $file -a -r $file ]
+    then 
+      echo "input your data, crtl+d to quit"
+      cat >> $file
+    else
+      echo "Permissions Denied"
+    fi
+  else
+    echo "$file could not be found.. Please try again"
+  fi 
+
+How to use the OR operator:
+
+- use || to use the OR operator.
+- use it in conjunction with if:
+ Example:
+  read -p "Enter your name : " name
+  if [ -z $name ] || [ $name = "no" ]
+  then
+    echo "Zero characters detected.."
+  elif [ -n $name ] && [ $name = "hi" ]
+  then
+    echo "I don't like this name.."
+    echo "Try again.."
+  else
+    echo "Go on.."
+  fi
+
+- if EITHER of the conditions of the if statement are true it will evalaute
+  unlike and which needs both conditions to be true.
+
+- if you wish to have an OR statement in one condition use the -o flag in 
+  between the conditions in a single brackett condition
+ Example:
+  if [ $variable = "hi" -o $variable = "bye" ]
+  then
+    echo "what?"
+  else
+    echo "Don't you use that tone with me, young man."
+  fi
+
+- use double pipes and double bracketts to have both conditions in the same 
+  bracketts with ||
+ Example:
+   if [[ $variable -gt 30 || $variable -lt 60 ]]
+
+How to perform arithmetic expressions with bash
+
+- + to add
+- - to subtract
+- * to multiply
+- / to divide
+- % to use modulus (Returns the remainder of a division problem)
+
+ Example:
+  num1=1
+  num2=2
+  echo $(( num1 + num2 ))
+
+- this will return the sum of num1 and num2
+- usually the echo command would interpret this as a string, but since we have
+  the $ sign in front of our double parenthesis enclosed expression, it will
+  interpret it as a a arithmetic expression.
+- you can also use normal digits instead of variables
+
+- use the expr command as an alternative way to perform arithmetic expressions
+- if you wish to multiply you must use \* instead of only * with the expr
+  command
+- the expr command use single parenthesis not double
+- you also have to actually call the variable using $ unlike if you weren't
+  using the expr command
+
+Floating point math operations | bc command
+
+- use the bc command (basic calculator) to solve arithmetic involving decimals
+- you need to pipe the expression to bc in order for it to function
+ Example:
+  num1=1
+  num2=2
+  echo "1.5 + 2" | bc
+- This would output the sum of 1 and 2 which is evidentally 3.5
+- You can use all of the normal operators with bc, the only difference is that
+  when you divide something like 20.5 / 5, it will only return 4 instead of
+  4.1
+- to fix this, you need to assign a scale variable to the expression.
+ Example:
+  echo "scale=2;1 + 2" | bc
+- scale will allow you to pick how many places after the decimal you want to
+  be present
+- always use scale with division operations especially if it has to do with
+  decimals
+- you can also use variables in place of the actual integers
+- follow the following syntax to solve for square roots using the bc command
+ Example:
+  number=11
+  echo "scale=2;sqrt($number)" | bc -l
+- scale determines how many spaces will be shown after the decimal point
+- use sqrt($yourvariable) to tell the program what number you are finding
+  the square root of
+- use the -l flag with the bc command. This lets the computer know that you 
+  are switching the math language. You need to do this for the script to work
+- to find out the power of a value enter the following syntax
+ Example:
+  echo "scale=2;4^7" | bc -l
+- this script will output 4 to the power of 7 which is 16384
+
+The Case Statement
+
+ Example:
+
+word=$1
+
+case $word in
+    "a" )
+       echo "this is the letter a" ;;
+esac
+
+
+- This is the Case Statement and it kind of works like the if statement
+  does. if the user gives the the program the letter "a" it will return 
+  "this is the letter a" you can also have multiple conditions and statements.
+
+Example:
+ 
+word=$1
+
+case $word in
+    "a" )
+       echo "this is the letter a" ;;
+    "b" )
+       echo "this is the letter b" ;;
+esac
+
+- dont forget to add ;; after each statement to tell the computer thats the
+  end of the statement
+- dont forget to add ) after your desired pattern
+- you can use certain patterns to see if certain values are specific things
+- use [a-z] to check to see if your value is lower case a-z
+- use [A-Z] to check to see if your value is upper case A-Z
+- use [0-9] to check to see if your value is a single digit in between 0-9
+- use ? to check for single character special characters
+- use * to check for ANYTHING. even things that are more than on character
+
+Example:
+
+word=$1
+
+case $word in
+    [a-z] )
+       echo "this is a letter in between a-z"
+    [0-9] )
+       echo "this is a number in between 0-9"
+esac
+
+
+
